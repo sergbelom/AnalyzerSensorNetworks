@@ -1,0 +1,2 @@
+# AnalyzerSensorNetworks
+Анализатор сенсорной сети
