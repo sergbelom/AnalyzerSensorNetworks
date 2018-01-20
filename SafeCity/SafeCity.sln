@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeCity", "SafeCity\SafeCity.csproj", "{FB425640-3F14-483B-AA69-E9AB41E02DAD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EXPO2025.SafeCity", "SafeCity\EXPO2025.SafeCity.csproj", "{FB425640-3F14-483B-AA69-E9AB41E02DAD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

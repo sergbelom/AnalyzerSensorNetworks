@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace SafeCity
 {
-    public partial class Form1 : Form
+    public partial class FormSafeCity : Form
     {
-        public Form1()
+        public FormSafeCity()
         {
             InitializeComponent();
         }
