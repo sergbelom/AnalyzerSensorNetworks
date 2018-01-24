@@ -11,11 +11,34 @@ namespace TestUSBSerialConverter
     class DataMEMS
     {
         // поля для выходный данных
-        static StreamWriter MEMSdata = new StreamWriter(@"E:\DataFromMems.txt");
+
+        private static StreamWriter MEMSdata = new StreamWriter(@"E:\DataFromMems" + DateTime.Now.ToString("d-M-yyyy HH-mm-ss") + ".txt");
+
+        //TODO: сделать задание значения полю MEMSdata через свойсвто ниже (при текущей реализации свойства файл не создается)
+        /*public StreamWriter MEMSData
+        {
+            set
+            {
+                MEMSdata = new StreamWriter(@"E:\DataFromMems" + DateTime.Now.ToString("d-M-yyyy HH-mm-ss") + ".txt");
+            }
+        }*/
+
         // поле для номера порта
-        static string portId = "COM3";
+        private static string portId = "COM3";
+
+        //TODO: сделать задание значения полю portId через свойсвто ниже
+        /*public string PortId
+        {
+            set
+            {
+                portId = "COM3";
+            }
+        }*/
+
         // поле для COM порта
-        static SerialPort MEMSport = new SerialPort(portId, 115200, Parity.None, 8, StopBits.Two);
+        private static SerialPort MEMSport = new SerialPort(portId, 115200, Parity.None, 8, StopBits.Two);
+
+        //TODO: сделать задание значения полю MEMSport через свойсвто
 
         // МЕТОД ReadDataFromMEMS:
         // открывает COM порт
@@ -41,31 +64,28 @@ namespace TestUSBSerialConverter
                 while ((byteInit = MEMSport.ReadByte()) != 105 && i == 0)
                 {
                 }
+                // ось X
                 XL = MEMSport.ReadByte();
                 XH = MEMSport.ReadByte();
-
                 XH = (XH << 8) | XL;
-
+                // ось Y
                 YL = MEMSport.ReadByte();
                 YH = MEMSport.ReadByte();
-
                 YH = (YH << 8) | YL;
-
+                // ось Z
                 ZL = MEMSport.ReadByte();
                 ZH = MEMSport.ReadByte();
-
                 ZH = (ZH << 8) | ZL;
-
+                // ID сенсоров
                 idL = MEMSport.ReadByte();
                 idH = MEMSport.ReadByte();
-
                 idH = (idH << 8) | idL;
 
                 byteEnd = MEMSport.ReadByte();
 
-                Console.WriteLine(idH + " " + XH + " " + YH + " " + ZH);
+                Console.WriteLine(idH + ";" + XH + ";" + YH + ";" + ZH);
 
-                MEMSdata.WriteLine(idH + " " + XH + " " + YH + " " + ZH);
+                MEMSdata.WriteLine(idH + ";" + XH + ";" + YH + ";" + ZH);
 
                 i++;
             }
