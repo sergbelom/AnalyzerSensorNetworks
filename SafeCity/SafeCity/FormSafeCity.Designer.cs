@@ -62,6 +62,7 @@
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
+            this.buttonGetData = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -210,6 +211,7 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.groupBox1.Controls.Add(this.buttonGetData);
             this.groupBox1.Controls.Add(this.button3);
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.button1);
@@ -378,6 +380,15 @@
             this.label16.TabIndex = 6;
             this.label16.Text = "Output signal from the accelerometer";
             // 
+            // buttonGetData
+            // 
+            this.buttonGetData.Location = new System.Drawing.Point(49, 241);
+            this.buttonGetData.Name = "buttonGetData";
+            this.buttonGetData.Size = new System.Drawing.Size(93, 32);
+            this.buttonGetData.TabIndex = 3;
+            this.buttonGetData.Text = "Get data";
+            this.buttonGetData.UseVisualStyleBackColor = true;
+            // 
             // FormSafeCity
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -442,6 +453,7 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Button buttonGetData;
     }
 }
 
