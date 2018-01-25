@@ -1,4 +1,6 @@
-﻿namespace SafeCity
+﻿using System;
+
+namespace SafeCity
 {
     partial class FormSafeCity
     {
@@ -388,6 +390,7 @@
             this.buttonGetData.TabIndex = 3;
             this.buttonGetData.Text = "Get data";
             this.buttonGetData.UseVisualStyleBackColor = true;
+            this.buttonGetData.Click += buttonGetData_Click;
             // 
             // FormSafeCity
             // 
@@ -415,9 +418,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+    }
 
+        private void buttonGetData_Click(object sender, EventArgs e)
+        {
+            //при нажатии на кнопку происходит вызов статического метода ReadDataFromMEMS() для считывания показаний с акселерометров
+            DataMEMS.ReadDataFromMEMS();
         }
-
         #endregion
 
         private System.Windows.Forms.MenuStrip menuStrip1;

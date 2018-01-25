@@ -6,16 +6,17 @@ using System.IO.Ports;
 using System.Threading;
 using System.Collections.Generic;
 
-namespace TestUSBSerialConverter
+namespace SafeCity
 {
-    class DataMEMS
+    public class DataMEMS
     {
+
         // поля для выходный данных
-        static StreamWriter MEMSdata = new StreamWriter(@"E:\DataFromMems.txt");
+        private static StreamWriter MEMSdata = new StreamWriter(@"E:\DataFromMems" + DateTime.Now.ToString("yy.MM.dd HH.mm.ss") + ".txt");
         // поле для номера порта
-        static string portId = "COM3";
+        private static string portId = "COM3";
         // поле для COM порта
-        static SerialPort MEMSport = new SerialPort(portId, 115200, Parity.None, 8, StopBits.Two);
+        private static SerialPort MEMSport = new SerialPort(portId, 115200, Parity.None, 8, StopBits.Two);
 
         // МЕТОД ReadDataFromMEMS:
         // открывает COM порт
@@ -62,11 +63,15 @@ namespace TestUSBSerialConverter
                 idH = (idH << 8) | idL;
 
                 byteEnd = MEMSport.ReadByte();
-
-                Console.WriteLine(idH + " " + XH + " " + YH + " " + ZH);
-
-                MEMSdata.WriteLine(idH + " " + XH + " " + YH + " " + ZH);
-
+             
+                //Console.WriteLine(idH + " " + XH + " " + YH + " " + ZH);
+                //TODO: разобарться с котсылем: почему в X, Y и Z попадают значения > 65000
+                // если измерение > 65000 то исключается вся строка измерений
+                if (XH < 10000 && YH < 10000 && ZH < 10000)
+                {
+                    MEMSdata.WriteLine( i + " " + idH + " " + XH + " " + YH + " " + ZH);
+                }
+                
                 i++;
             }
 
