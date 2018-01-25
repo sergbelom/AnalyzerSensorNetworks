@@ -215,6 +215,17 @@
         wj+89W3J/NXcqQAAAABJRU5ErkJggg==
 </value>
   </data>
+  <data name="loadFromFileToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
+        JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJ
+        TUUH4gEZFCoKE7gPFgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAC6SURBVEhL
+        7ZLRCcMwDEQ1SkfpaN2vga7QTdI7YwVdKlSn9U8hDx5Ecnwijs1sWXOP0vY9zR6X3nD2wW7F/QpvXTyT
+        be9+SAyNVjDY3+MziXtliCwEKz4OoD7kbaFbMTSAYki+ACuGB8C0SSv+fwB/Xruq0G9LlkHTJvWAUbMM
+        mjZnmjZnqsUkJFMK0M4UN+MrsZdIphSAL8beEbmXxJ4Wk5BMKcB5REQypQDnERHJjIV87g/GTClmu6wv
+        e3Cg+tkxlhIAAAAASUVORK5CYII=
+</value>
+  </data>
   <data name="button3.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAASCAYAAABB7B6eAAAABGdBTUEAALGOfPtRkwAAACBjSFJNAACH
@@ -313,7 +324,7 @@
     <value>132, 17</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>35</value>
+    <value>34</value>
   </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
