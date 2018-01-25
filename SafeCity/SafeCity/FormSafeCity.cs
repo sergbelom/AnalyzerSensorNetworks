@@ -83,40 +83,40 @@ namespace SafeCity
 
                 while (i < 3600)
                 {
-                    sensorId = Convert.ToInt32(arrayCoordinates[0]);
-                    sensor1Signal.DrawLine(new Pen(Color.Green, 1), gx1, gy1, gxx1, Convert.ToInt32(arrayCoordinates[1]) / 500);
+                    sensorId = Convert.ToInt32(arrayCoordinates[1]);
+                    sensor1Signal.DrawLine(new Pen(Color.Green, 1), gx1, gy1, gxx1, Convert.ToInt32(arrayCoordinates[2]) / 500);
                     gx1 = gxx1;
-                    gy1 = Convert.ToInt32(arrayCoordinates[1]) / 500;
+                    gy1 = Convert.ToInt32(arrayCoordinates[2]) / 500;
                     gxx1 = gxx1 + 2;
 
-                    sensor1Signal.DrawLine(new Pen(Color.Blue, 1), bx1, by1, bxx1, Convert.ToInt32(arrayCoordinates[2]) / 500);
+                    sensor1Signal.DrawLine(new Pen(Color.Blue, 1), bx1, by1, bxx1, Convert.ToInt32(arrayCoordinates[3]) / 500);
                     bx1 = bxx1;
-                    by1 = Convert.ToInt32(arrayCoordinates[2]) / 500;
+                    by1 = Convert.ToInt32(arrayCoordinates[3]) / 500;
                     bxx1 = bxx1 + 2;
 
-                    sensor1Signal.DrawLine(new Pen(Color.Red, 1), rx1, ry1, rx11, Convert.ToInt32(arrayCoordinates[3]) / 200);
+                    sensor1Signal.DrawLine(new Pen(Color.Red, 1), rx1, ry1, rx11, Convert.ToInt32(arrayCoordinates[4]) / 500);
                     rx1 = rx11;
-                    ry1 = Convert.ToInt32(arrayCoordinates[3]) / 200;
+                    ry1 = Convert.ToInt32(arrayCoordinates[4]) / 500;
                     rx11 = rx11 + 2;
 
                     arrayCoordinates = sr.ReadLine().Split(' ');
 
-                    if(sensorId != Convert.ToInt32(arrayCoordinates[0]))
+                    if(sensorId != Convert.ToInt32(arrayCoordinates[1]))
                     {
-                        int xx22 = Convert.ToInt32(arrayCoordinates[1]) / 500;
-                        sensor2Signal.DrawLine(new Pen(Color.Green, 1), gx2, gy2, gxx2, Convert.ToInt32(arrayCoordinates[1]) / 500);
+                        int xx22 = Convert.ToInt32(arrayCoordinates[2]) / 500;
+                        sensor2Signal.DrawLine(new Pen(Color.Green, 1), gx2, gy2, gxx2, Convert.ToInt32(arrayCoordinates[2]) / 500);
                         gx2 = gxx2;
-                        gy2 = Convert.ToInt32(arrayCoordinates[1]) / 500;
+                        gy2 = Convert.ToInt32(arrayCoordinates[2]) / 500;
                         gxx2 = gxx2 + 2;
 
-                        sensor2Signal.DrawLine(new Pen(Color.Blue, 1), bx2, by2, bxx2, Convert.ToInt32(arrayCoordinates[2]) / 500);
+                        sensor2Signal.DrawLine(new Pen(Color.Blue, 1), bx2, by2, bxx2, Convert.ToInt32(arrayCoordinates[3]) / 500);
                         bx2 = bxx2;
-                        by2 = Convert.ToInt32(arrayCoordinates[2]) / 500;
+                        by2 = Convert.ToInt32(arrayCoordinates[3]) / 500;
                         bxx2 = bxx2 + 2;
 
-                        sensor2Signal.DrawLine(new Pen(Color.Red, 1), rx2, ry2, rxx2, Convert.ToInt32(arrayCoordinates[3]) / 100);
+                        sensor2Signal.DrawLine(new Pen(Color.Red, 1), rx2, ry2, rxx2, Convert.ToInt32(arrayCoordinates[4]) / 500);
                         rx2 = rxx2;
-                        ry2 = Convert.ToInt32(arrayCoordinates[3]) / 100;
+                        ry2 = Convert.ToInt32(arrayCoordinates[4]) / 500;
                         rxx2 = rxx2 + 2;
 
                         arrayCoordinates = sr.ReadLine().Split(' ');
