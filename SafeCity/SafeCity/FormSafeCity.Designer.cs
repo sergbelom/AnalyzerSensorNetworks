@@ -463,4 +463,3 @@ namespace SafeCity
         private System.Windows.Forms.Button buttonGetData;
     }
 }
-

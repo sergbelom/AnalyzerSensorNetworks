@@ -45,15 +45,15 @@ namespace SafeCity
                 // ось X
                 XL = MEMSport.ReadByte();
                 XH = MEMSport.ReadByte();
-                XH = (XH << 8) | XL;
+                XL = (XL << 8) | XH;
                 // ось Y
                 YL = MEMSport.ReadByte();
                 YH = MEMSport.ReadByte();
-                YH = (YH << 8) | YL;
+                YL = (YL << 8) | YH;
                 // ось Z
                 ZL = MEMSport.ReadByte();
                 ZH = MEMSport.ReadByte();
-                ZH = (ZH << 8) | ZL;
+                ZL = (ZL << 8) | ZH;
                 // ID сенсоров
                 idL = MEMSport.ReadByte();
                 idH = MEMSport.ReadByte();
@@ -61,9 +61,8 @@ namespace SafeCity
 
                 byteEnd = MEMSport.ReadByte();
 
-                Console.WriteLine(idH + " " + XH + " " + YH + " " + ZH);
-
-                MEMSdata.WriteLine(idH + " " + XH + " " + YH + " " + ZH);
+                //Console.WriteLine(idL + " " + XL + " " + YL + " " + ZL);
+                MEMSdata.WriteLine( i + " " + idH + " " + XL + " " + YL + " " + ZL);
 
                 i++;
             }
@@ -72,6 +71,5 @@ namespace SafeCity
             MEMSport.Close();
 
         }
-
     }
 }
