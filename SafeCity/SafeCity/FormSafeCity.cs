@@ -94,9 +94,9 @@ namespace SafeCity
                     by1 = Convert.ToInt32(arrayCoordinates[2]) / 500;
                     bxx1 = bxx1 + 2;
 
-                    sensor1Signal.DrawLine(new Pen(Color.Red, 1), rx1, ry1, rx11, Convert.ToInt32(arrayCoordinates[3]) / 200);
+                    sensor1Signal.DrawLine(new Pen(Color.Red, 1), rx1, ry1, rx11, Convert.ToInt32(arrayCoordinates[3]) / 500);
                     rx1 = rx11;
-                    ry1 = Convert.ToInt32(arrayCoordinates[3]) / 200;
+                    ry1 = Convert.ToInt32(arrayCoordinates[3]) / 500;
                     rx11 = rx11 + 2;
 
                     arrayCoordinates = sr.ReadLine().Split(' ');
@@ -114,9 +114,9 @@ namespace SafeCity
                         by2 = Convert.ToInt32(arrayCoordinates[2]) / 500;
                         bxx2 = bxx2 + 2;
 
-                        sensor2Signal.DrawLine(new Pen(Color.Red, 1), rx2, ry2, rxx2, Convert.ToInt32(arrayCoordinates[3]) / 100);
+                        sensor2Signal.DrawLine(new Pen(Color.Red, 1), rx2, ry2, rxx2, Convert.ToInt32(arrayCoordinates[3]) / 500);
                         rx2 = rxx2;
-                        ry2 = Convert.ToInt32(arrayCoordinates[3]) / 100;
+                        ry2 = Convert.ToInt32(arrayCoordinates[3]) / 500;
                         rxx2 = rxx2 + 2;
 
                         arrayCoordinates = sr.ReadLine().Split(' ');

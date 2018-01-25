@@ -43,27 +43,34 @@ namespace SafeCity
                 {
                 }
                 // ось X
-                XL = MEMSport.ReadByte();
                 XH = MEMSport.ReadByte();
-                XL = (XL << 8) | XH;
-                // ось Y
-                YL = MEMSport.ReadByte();
+                XL = MEMSport.ReadByte();
+
+                XH = (XH << 8) | XL;
+
                 YH = MEMSport.ReadByte();
-                YL = (YL << 8) | YH;
-                // ось Z
-                ZL = MEMSport.ReadByte();
+                YL = MEMSport.ReadByte();
+
+                YH = (YH << 8) | YL;
+
                 ZH = MEMSport.ReadByte();
-                ZL = (ZL << 8) | ZH;
-                // ID сенсоров
+                ZL = MEMSport.ReadByte();
+
+                ZH = (ZH << 8) | ZL;
+
                 idL = MEMSport.ReadByte();
                 idH = MEMSport.ReadByte();
                 idH = (idH << 8) | idL;
 
                 byteEnd = MEMSport.ReadByte();
+             
+                //Console.WriteLine(idH + " " + XH + " " + YH + " " + ZH);
+                //TODO: разобарться с котсылем: почему в X, Y и Z попадают значения > 65000
+                // если измерение > 65000 то исключается вся строка измерений
 
-                //Console.WriteLine(idL + " " + XL + " " + YL + " " + ZL);
-                MEMSdata.WriteLine( i + " " + idH + " " + XL + " " + YL + " " + ZL);
-
+                    MEMSdata.WriteLine( i + " " + idH + " " + XH + " " + YH + " " + ZH);
+                
+                
                 i++;
             }
 
