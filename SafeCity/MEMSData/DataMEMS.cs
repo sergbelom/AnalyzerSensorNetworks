@@ -12,11 +12,11 @@ namespace SafeCity
     {
 
         // поля для выходный данных
-        private static StreamWriter MEMSdata = new StreamWriter(@"E:\DataFromMems" + DateTime.Now.ToString("yy.MM.dd HH.mm.ss") + ".txt");
+        static StreamWriter MEMSdata = new StreamWriter(@"E:\DataFromMems.txt");
         // поле для номера порта
-        private static string portId = "COM3";
+        static string portId = "COM3";
         // поле для COM порта
-        private static SerialPort MEMSport = new SerialPort(portId, 115200, Parity.None, 8, StopBits.Two);
+        static SerialPort MEMSport = new SerialPort(portId, 115200, Parity.None, 8, StopBits.Two);
 
         // МЕТОД ReadDataFromMEMS:
         // открывает COM порт
@@ -42,36 +42,29 @@ namespace SafeCity
                 while ((byteInit = MEMSport.ReadByte()) != 105 && i == 0)
                 {
                 }
+                // ось X
                 XL = MEMSport.ReadByte();
                 XH = MEMSport.ReadByte();
-
                 XH = (XH << 8) | XL;
-
+                // ось Y
                 YL = MEMSport.ReadByte();
                 YH = MEMSport.ReadByte();
-
                 YH = (YH << 8) | YL;
-
+                // ось Z
                 ZL = MEMSport.ReadByte();
                 ZH = MEMSport.ReadByte();
-
                 ZH = (ZH << 8) | ZL;
-
+                // ID сенсоров
                 idL = MEMSport.ReadByte();
                 idH = MEMSport.ReadByte();
-
                 idH = (idH << 8) | idL;
 
                 byteEnd = MEMSport.ReadByte();
-             
-                //Console.WriteLine(idH + " " + XH + " " + YH + " " + ZH);
-                //TODO: разобарться с котсылем: почему в X, Y и Z попадают значения > 65000
-                // если измерение > 65000 то исключается вся строка измерений
-                if (XH < 10000 && YH < 10000 && ZH < 10000)
-                {
-                    MEMSdata.WriteLine( i + " " + idH + " " + XH + " " + YH + " " + ZH);
-                }
-                
+
+                Console.WriteLine(idH + " " + XH + " " + YH + " " + ZH);
+
+                MEMSdata.WriteLine(idH + " " + XH + " " + YH + " " + ZH);
+
                 i++;
             }
 
