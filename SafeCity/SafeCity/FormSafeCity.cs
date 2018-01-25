@@ -21,8 +21,16 @@ namespace SafeCity
 
         private void buttonGetData_Click_1(object sender, EventArgs e)
         {
-            //при нажатии на кнопку происходит вызов статического метода ReadDataFromMEMS() для считывания показаний с акселерометров
-            DataMEMS.ReadDataFromMEMS();
+            try
+            {
+                //при нажатии на кнопку происходит вызов статического метода ReadDataFromMEMS() для считывания показаний с акселерометров
+                DataMEMS.ReadDataFromMEMS();
+            }
+            catch(Exception ex)
+            {
+                listBoxLog.Items.Add(ex.Message + " " + DateTime.Now.ToLongTimeString());
+                listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
+            }
         }
 
         private void loadFromFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -141,7 +149,7 @@ namespace SafeCity
             }
             catch (Exception ex)
             {
-                listBoxLog.Items.Add(ex.Message + info.FileName + " " + DateTime.Now.ToLongTimeString());
+                listBoxLog.Items.Add(ex.Message + " " + DateTime.Now.ToLongTimeString());
                 listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
             }
             finally
