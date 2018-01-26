@@ -9,11 +9,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO.Ports;
 
 namespace SafeCity
 {
     public partial class FormSafeCity : Form
     {
+        private bool connect = true;
         public FormSafeCity()
         {
             InitializeComponent();
@@ -160,6 +162,116 @@ namespace SafeCity
                 listBoxLog.Items.Add("Cчитывание данных с файла " + info.FileName + " завершилось " + DateTime.Now.ToLongTimeString());
                 listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
             }
+        }
+
+        private void buttonConnect_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DataMEMS.portId = "COM3";
+                // поле для COM порта
+                DataMEMS.MEMSport = new SerialPort( DataMEMS.portId , 115200, Parity.None, 8, StopBits.Two);
+                listBoxLog.Items.Add("Подключение к " + DataMEMS.portId + " прошло успешно " + DateTime.Now.ToLongTimeString());
+                listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
+            }
+            catch (Exception ex)
+            {
+                listBoxLog.Items.Add( ex.Message + DateTime.Now.ToLongTimeString());
+                listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
+            }
+        }
+
+        private void buttonRun_Click(object sender, EventArgs e)
+        {
+            var sensor1Signal = pictureBoxSensor1Signal.CreateGraphics();
+                var sensor2Signal = pictureBoxSensor2Signal.CreateGraphics();
+
+                int gx1 = 0;
+                int gy1 = 0;
+                int gxx1 = 2;
+
+                int bx1 = 0;
+                int by1 = 0;
+                int bxx1 = 2;
+
+                int rx1 = 0;
+                int ry1 = 0;
+                int rx11 = 2;
+
+                int gx2 = 0;
+                int gy2 = 0;
+                int gxx2 = 2;
+
+                int bx2 = 0;
+                int by2 = 0;
+                int bxx2 = 2;
+
+                int rx2 = 0;
+                int ry2 = 0;
+                int rxx2 = 2;
+
+                int sensorId1 = 0;
+            int sensorId2;
+
+            int ii = 0;
+            int i = 0;
+            int[] inter;
+            while (i < 100)
+            {
+                inter = DataMEMS.ReadDataFromMEMS();
+                //sensorId1 = inter[0];
+                if (i == 0)
+                {
+                    sensorId1 = inter[0];
+                }
+
+                if (inter[0] == sensorId1)
+                {
+                sensor1Signal.DrawLine(new Pen(Color.Green, 1), gx1, gy1, gxx1, inter[1] / 500);
+                gx1 = gxx1;
+                gy1 = inter[1] / 500;
+                gxx1 = gxx1 + 2;
+
+                sensor1Signal.DrawLine(new Pen(Color.Blue, 1), bx1, by1, bxx1, inter[2] / 500);
+                bx1 = bxx1;
+                by1 = inter[2] / 500;
+                bxx1 = bxx1 + 2;
+
+                sensor1Signal.DrawLine(new Pen(Color.Red, 1), rx1, ry1, rx11, inter[3] / 500);
+                rx1 = rx11;
+                ry1 = inter[3] / 500;
+                rx11 = rx11 + 2;
+                }
+                else
+                {
+                    int xx22 = inter[1] / 500;
+                    sensor2Signal.DrawLine(new Pen(Color.Green, 1), gx2, gy2, gxx2, inter[1] / 500);
+                    gx2 = gxx2;
+                    gy2 = inter[1] / 500;
+                    gxx2 = gxx2 + 2;
+
+                    sensor2Signal.DrawLine(new Pen(Color.Blue, 1), bx2, by2, bxx2, inter[2] / 500);
+                    bx2 = bxx2;
+                    by2 = inter[2] / 500;
+                    bxx2 = bxx2 + 2;
+
+                    sensor2Signal.DrawLine(new Pen(Color.Red, 1), rx2, ry2, rxx2, inter[3] / 500);
+                    rx2 = rxx2;
+                    ry2 = inter[3] / 500;
+                    rxx2 = rxx2 + 2;
+                }
+                listBoxLog.Items.Add(inter[0] + " " + inter[1] + " " + inter[2] + " " + inter[3] + " " + DateTime.Now.ToLongTimeString());
+                listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
+
+
+                //string[] arrayCoordinates;
+                //arrayCoordinates = inter;
+
+
+
+                i++;
+            }
+            
         }
     }
 }
