@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SafeCity
 {
-    public static class Accelerometr
+    public static class Accelerometer
     {
         public static int[] GetData(SerialPort serialPort)
         {
@@ -19,28 +19,24 @@ namespace SafeCity
             int idH, idL; // сигналы для ID сенсоров
 
             while ((byteInit = serialPort.ReadByte()) != 105) { }
-            // ось X
+
             XH = serialPort.ReadByte();
             XL = serialPort.ReadByte();
-
             XH = (XH << 8) | XL;
 
             YH = serialPort.ReadByte();
             YL = serialPort.ReadByte();
-
             YH = (YH << 8) | YL;
 
             ZH = serialPort.ReadByte();
             ZL = serialPort.ReadByte();
-
             ZH = (ZH << 8) | ZL;
 
             idL = serialPort.ReadByte();
             idH = serialPort.ReadByte();
             idH = (idH << 8) | idL;
 
-            byteEnd = serialPort.ReadByte(); //?????????????????????????????????????????
-
+            byteEnd = serialPort.ReadByte();
             return new int[] { idH, XH, YH, ZH };
         }
     }

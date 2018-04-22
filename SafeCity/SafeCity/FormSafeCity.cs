@@ -182,10 +182,93 @@ namespace SafeCity
         {
             Connect();
         }
-        
-        //serialPort = COMPort.Connect(serialPort);
  
         private void buttonRun_Click(object sender, EventArgs e)
+        {
+            Run();
+        }
+
+        private void connectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Connect();
+        }
+
+        private void runToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Run();
+        }
+
+        private void aboutProgramToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormAboutProgram formAboutProgram = new FormAboutProgram();
+            formAboutProgram.Show();
+        }
+
+        private void pictureBoxInfoSensor1_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.FillRectangle(Brushes.Green, 200, 2, 10, 10);
+            e.Graphics.DrawString("X", new Font("Times New Roman", 10), Brushes.Black, 220, 2);
+            e.Graphics.FillRectangle(Brushes.Blue, 250, 2, 10, 10);
+            e.Graphics.DrawString("Y", new Font("Times New Roman", 10), Brushes.Black, 270, 2);
+            e.Graphics.FillRectangle(Brushes.Red, 300, 2, 10, 10);
+            e.Graphics.DrawString("Z", new Font("Times New Roman", 10), Brushes.Black, 320, 2);
+        }
+
+        private void pictureBoxInfoSensor2_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.FillRectangle(Brushes.Green, 200, 2, 10, 10);
+            e.Graphics.DrawString("X", new Font("Times New Roman", 10), Brushes.Black, 220, 2);
+            e.Graphics.FillRectangle(Brushes.Blue, 250, 2, 10, 10);
+            e.Graphics.DrawString("Y", new Font("Times New Roman", 10), Brushes.Black, 270, 2);
+            e.Graphics.FillRectangle(Brushes.Red, 300, 2, 10, 10);
+            e.Graphics.DrawString("Z", new Font("Times New Roman", 10), Brushes.Black, 320, 2);
+        }
+
+        private void pictureBoxSensor1Signal_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 60), new Point(800, 60));
+            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 120), new Point(800, 120));
+            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 180), new Point(800, 180));
+        }
+
+        private void pictureBoxSensor2Signal_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 60), new Point(800, 60));
+            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 120), new Point(800, 120));
+            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 180), new Point(800, 180));
+        }
+
+        private void buttonExportToR_Click(object sender, EventArgs e)
+        {
+            string path = @"D:\result.html";
+            System.Diagnostics.Process.Start(path);
+
+        }
+        private void Connect()
+        {
+            if (connect == true)
+            {
+                serialPort = COMPort.Connect(serialPort);
+                if (serialPort == null)
+                {
+                    Logging(" Поделючиться к COM3 не удалось");
+                    return;
+                }
+                ChangeDesign("Disconnect", Color.Red, Properties.Resources.button_red, true);
+                connect = false;
+                Logging(" Подключение к COM3 прошло успешно");
+            }
+            else
+            {
+                COMPort.Disconnect(serialPort);
+                ChangeDesign("Connect", Color.FromArgb(44, 48, 51), Properties.Resources.button_on, false);
+                connect = true;
+                CleanPictureBoxes();
+                Logging(" Отключение от COM3 прошло успешно");
+            }
+        }
+        #region Methods
+        private void Run()
         {
             List<Complex> listComplexX = new List<Complex>();
             List<Complex> listComplexY = new List<Complex>();
@@ -229,7 +312,7 @@ namespace SafeCity
             sensor2Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 180), new Point(800, 180));
             while (i < 1000)
             {
-                arrayCoordinates = Accelerometr.GetData(serialPort);
+                arrayCoordinates = Accelerometer.GetData(serialPort);
                 if (i == 0)
                     sensorId1 = arrayCoordinates[0];
                 if (arrayCoordinates[0] == sensorId1)
@@ -307,14 +390,8 @@ namespace SafeCity
             Complex[] samplesY = listComplexY.ToArray();
             Complex[] samplesZ = listComplexZ.ToArray();
 
-            //chart1.ChartAreas[0].AxisX.Minimum = -1000;
-            //chart1.ChartAreas[0].AxisX.Maximum = 10;
-            //chart1.ChartAreas[0].AxisX.Interval = 1;
-            //chart1.ChartAreas[0].AxisY.Minimum = -1000;
-            //chart1.ChartAreas[0].AxisY.Maximum = 100;
-
             Fourier.Forward(samplesX, FourierOptions.Matlab);
-            for (int j = 0; j < samplesX.Length/10; j++)
+            for (int j = 0; j < samplesX.Length / 10; j++)
             {
                 chart1.Series["X"].Points.AddXY
                         (j, samplesX[j * 10].Magnitude);
@@ -338,114 +415,20 @@ namespace SafeCity
             }
         }
 
-        private void connectToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ChangeDesign(string textForButton, Color backColor, Image menuImage, bool enabled)
         {
-            Connect();
+            buttonConnect.Text = "      " + textForButton;
+            buttonConnect.BackColor = backColor;
+            connectToolStripMenuItem.Text = textForButton;
+            connectToolStripMenuItem.Image = menuImage;
+            buttonRun.Enabled = enabled;
+            runToolStripMenuItem.Enabled = enabled;
         }
 
-        private void aboutProgramToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CleanPictureBoxes()
         {
-            FormAboutProgram formAboutProgram = new FormAboutProgram();
-            formAboutProgram.Show();
-        }
-
-        private void pictureBoxInfoSensor1_Paint(object sender, PaintEventArgs e)
-        {
-            e.Graphics.FillRectangle(Brushes.Green, 200, 2, 10, 10);
-            e.Graphics.DrawString("X", new Font("Times New Roman", 10), Brushes.Black, 220, 2);
-            e.Graphics.FillRectangle(Brushes.Blue, 250, 2, 10, 10);
-            e.Graphics.DrawString("Y", new Font("Times New Roman", 10), Brushes.Black, 270, 2);
-            e.Graphics.FillRectangle(Brushes.Red, 300, 2, 10, 10);
-            e.Graphics.DrawString("Z", new Font("Times New Roman", 10), Brushes.Black, 320, 2);
-        }
-
-        private void pictureBoxInfoSensor2_Paint(object sender, PaintEventArgs e)
-        {
-            e.Graphics.FillRectangle(Brushes.Green, 200, 2, 10, 10);
-            e.Graphics.DrawString("X", new Font("Times New Roman", 10), Brushes.Black, 220, 2);
-            e.Graphics.FillRectangle(Brushes.Blue, 250, 2, 10, 10);
-            e.Graphics.DrawString("Y", new Font("Times New Roman", 10), Brushes.Black, 270, 2);
-            e.Graphics.FillRectangle(Brushes.Red, 300, 2, 10, 10);
-            e.Graphics.DrawString("Z", new Font("Times New Roman", 10), Brushes.Black, 320, 2);
-        }
-
-        private void pictureBoxSensor1Signal_Paint(object sender, PaintEventArgs e)
-        {
-            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 60), new Point(800, 60));
-            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 120), new Point(800, 120));
-            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 180), new Point(800, 180));
-        }
-
-        private void pictureBoxSensor2Signal_Paint(object sender, PaintEventArgs e)
-        {
-            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 60), new Point(800, 60));
-            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 120), new Point(800, 120));
-            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 180), new Point(800, 180));
-        }
-
-        private void buttonExportToR_Click(object sender, EventArgs e)
-        {
-            string path = @"D:\result.html";
-            System.Diagnostics.Process.Start(path);
-
-        }
-        private void Connect()
-        {
-            if (connect == true)
-            {
-                serialPort = COMPort.Connect(serialPort);
-
-                if (serialPort == null)
-                {
-                    Logging(" Поделючиться к COM3 не удалось");
-                    return;
-                }
-                buttonConnect.Text = "        Disconnect";
-                buttonConnect.ForeColor = Color.White;
-                buttonConnect.BackColor = Color.Red;
-                buttonConnect.Image = Properties.Resources.button_off;
-                connectToolStripMenuItem.Text = "Disconnect";
-                connectToolStripMenuItem.Image = Properties.Resources.button_red;
-                connect = false;
-                Logging(" Подключение к COM3 прошло успешно");
-
-
-                //try
-                //{
-
-                //    //serialPort = new SerialPort("COM3", 115200, Parity.None, 8, StopBits.Two);
-                //    //serialPort.Open();
-                //    //DataMEMS.MEMSport = new SerialPort("COM3", 9600, Parity.None, 8, StopBits.Two);
-                //    //DataMEMS.OpenPort(true);
-                //    listBoxLog.Items.Add(DateTime.Now.ToLongTimeString() + " Подключение к COM3 прошло успешно");
-                //    listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
-                //}
-                //catch (Exception ex)
-                //{
-                //    //listBoxLog.Items.Add(DateTime.Now.ToLongTimeString() + " " + ex.Message);
-                //    //listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
-                //}
-            }
-            else
-            {
-                //DataMEMS.OpenPort(false);
-                COMPort.Disconnect(serialPort);
-                buttonConnect.Text = "     Connect";
-                buttonConnect.ForeColor = Color.White;
-                buttonConnect.BackColor = Color.FromArgb(44, 48, 51);
-                buttonConnect.Image = Properties.Resources.button_off;
-                connectToolStripMenuItem.Text = "Connect";
-                connectToolStripMenuItem.Image = Properties.Resources.button_on;
-                connect = true;
-
-                var sensor1Signal = pictureBoxSensor1Signal.CreateGraphics();
-                var sensor2Signal = pictureBoxSensor2Signal.CreateGraphics();
-                sensor1Signal.Clear(Color.White);
-                sensor2Signal.Clear(Color.White);
-                Logging(" Отключение от COM3 прошло успешно");
-                //listBoxLog.Items.Add(DateTime.Now.ToLongTimeString() + " Отключение от COM3 прошло успешно");
-                //listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
-            }
+            pictureBoxSensor1Signal.CreateGraphics().Clear(Color.White);
+            pictureBoxSensor2Signal.CreateGraphics().Clear(Color.White);
         }
 
         private void Logging(string message)
@@ -453,6 +436,6 @@ namespace SafeCity
             listBoxLog.Items.Add(DateTime.Now.ToLongTimeString() + message);
             listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
         }
-
+        #endregion
     }
 }

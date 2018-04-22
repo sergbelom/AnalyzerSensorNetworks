@@ -117,35 +117,37 @@ namespace SafeCity
             // 
             this.connectToolStripMenuItem.Image = global::SafeCity.Properties.Resources.button_on;
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            this.connectToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.connectToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
             this.connectToolStripMenuItem.Text = "Connect";
             this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
             // 
             // runToolStripMenuItem
             // 
+            this.runToolStripMenuItem.Enabled = false;
             this.runToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("runToolStripMenuItem.Image")));
             this.runToolStripMenuItem.Name = "runToolStripMenuItem";
-            this.runToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.runToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
             this.runToolStripMenuItem.Text = "Run";
+            this.runToolStripMenuItem.Click += new System.EventHandler(this.runToolStripMenuItem_Click);
             // 
             // exportToRToolStripMenuItem
             // 
             this.exportToRToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("exportToRToolStripMenuItem.Image")));
             this.exportToRToolStripMenuItem.Name = "exportToRToolStripMenuItem";
-            this.exportToRToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.exportToRToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
             this.exportToRToolStripMenuItem.Text = "Export to R";
             // 
             // openCSUFileToolStripMenuItem
             // 
             this.openCSUFileToolStripMenuItem.Name = "openCSUFileToolStripMenuItem";
-            this.openCSUFileToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.openCSUFileToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
             this.openCSUFileToolStripMenuItem.Text = "Open CSU file";
             // 
             // loadFromFileToolStripMenuItem
             // 
             this.loadFromFileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("loadFromFileToolStripMenuItem.Image")));
             this.loadFromFileToolStripMenuItem.Name = "loadFromFileToolStripMenuItem";
-            this.loadFromFileToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.loadFromFileToolStripMenuItem.Size = new System.Drawing.Size(156, 26);
             this.loadFromFileToolStripMenuItem.Text = "Load from file";
             this.loadFromFileToolStripMenuItem.Click += new System.EventHandler(this.loadFromFileToolStripMenuItem_Click);
             // 
@@ -197,6 +199,7 @@ namespace SafeCity
             // buttonRun
             // 
             this.buttonRun.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(48)))), ((int)(((byte)(51)))));
+            this.buttonRun.Enabled = false;
             this.buttonRun.ForeColor = System.Drawing.Color.White;
             this.buttonRun.Image = ((System.Drawing.Image)(resources.GetObject("buttonRun.Image")));
             this.buttonRun.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -369,9 +372,9 @@ namespace SafeCity
             this.listBoxLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listBoxLog.FormattingEnabled = true;
-            this.listBoxLog.Location = new System.Drawing.Point(6, 530);
+            this.listBoxLog.Location = new System.Drawing.Point(200, 604);
             this.listBoxLog.Name = "listBoxLog";
-            this.listBoxLog.Size = new System.Drawing.Size(182, 147);
+            this.listBoxLog.Size = new System.Drawing.Size(1161, 108);
             this.listBoxLog.TabIndex = 14;
             // 
             // pictureBox1
@@ -416,7 +419,7 @@ namespace SafeCity
             this.chart2.ChartAreas.Add(chartArea2);
             legend2.Name = "Legend1";
             this.chart2.Legends.Add(legend2);
-            this.chart2.Location = new System.Drawing.Point(199, 489);
+            this.chart2.Location = new System.Drawing.Point(800, 380);
             this.chart2.Name = "chart2";
             series2.ChartArea = "ChartArea1";
             series2.Legend = "Legend1";
@@ -432,7 +435,7 @@ namespace SafeCity
             this.chart3.ChartAreas.Add(chartArea3);
             legend3.Name = "Legend1";
             this.chart3.Legends.Add(legend3);
-            this.chart3.Location = new System.Drawing.Point(200, 598);
+            this.chart3.Location = new System.Drawing.Point(676, 489);
             this.chart3.Name = "chart3";
             series3.ChartArea = "ChartArea1";
             series3.Legend = "Legend1";

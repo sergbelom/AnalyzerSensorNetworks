@@ -50,7 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Accelerometr.cs" />
+    <Compile Include="Accelerometer.cs" />
     <Compile Include="COMPort.cs" />
     <Compile Include="FormAboutProgram.cs">
       <SubType>Form</SubType>
