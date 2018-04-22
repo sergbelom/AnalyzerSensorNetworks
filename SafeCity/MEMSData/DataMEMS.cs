@@ -18,14 +18,26 @@ namespace SafeCity
         // поле для COM порта
         public static SerialPort MEMSport;// = new SerialPort(portId, 115200, Parity.None, 8, StopBits.Two);
 
+        public static void OpenPort( bool isOpen )
+        {
+            if (isOpen)
+            {
+                MEMSport.Open();
+            }
+            else
+            {
+                MEMSdata.Close();
+            }
+        }
+
+
         // МЕТОД ReadDataFromMEMS:
         // открывает COM порт
         // считывает вектор данных между байтами 102 и 105
         // из сигналов L и H по всем осям делает один для каждой оси
         // выводит значения для каждого сенсора по его ID на консоль и в файл, расположенный в MEMSdata
         public static int[] ReadDataFromMEMS()
-        {
-            MEMSport.Open();
+        {            
 
             // определяем переменные для считанных сигналов по X Y Z также для метки начала, конца вектора измерений и ID сенсоров
             int byteEnd, byteInit;
@@ -34,7 +46,7 @@ namespace SafeCity
             int ZH, ZL;  // высокий и низкий сигнал для Z
             int idH, idL; // сигналы для ID сенсоров
 
-            int[] resultDataMems = new int[5];
+            int[] resultDataMems = new int[4];
 
             //int i = 0;
             //while (i < 100)
@@ -74,7 +86,7 @@ namespace SafeCity
                 //TODO: разобарться с котсылем: почему в X, Y и Z попадают значения > 65000
                 // если измерение > 65000 то исключается вся строка измерений
 
-                // MEMSdata.WriteLine( idH + " " + XH + " " + YH + " " + ZH);
+                MEMSdata.WriteLine( idH + " " + XH + " " + YH + " " + ZH);
                 // должен быть вывод в файл одновременно с отрисовкой, при этом по кнопке Run этот файл должен пересоздаваться
                 // далее выходной файл будет является входным для анализа в R
 
@@ -85,15 +97,11 @@ namespace SafeCity
                 resultDataMems[3] = ZH;
 
                 //i++;
-                Thread.Sleep(10);
                 // сдлеать проверку после слип на новы ID
 
-//            }
-
-
-
-            MEMSdata.Close();
-            MEMSport.Close();
+                // }
+            
+            //MEMSport.Close();
 
             return resultDataMems;
 

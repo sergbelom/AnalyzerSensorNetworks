@@ -6,15 +6,17 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
+using System.Numerics;
+using MathNet.Numerics.IntegralTransforms;
+using System.Threading;
 
 namespace SafeCity
 {
     public partial class FormSafeCity : Form
     {
+        SerialPort serialPort = new SerialPort();
         private bool connect = true;
         public FormSafeCity()
         {
@@ -30,7 +32,7 @@ namespace SafeCity
             }
             catch(Exception ex)
             {
-                listBoxLog.Items.Add(ex.Message + " " + DateTime.Now.ToLongTimeString());
+                listBoxLog.Items.Add(DateTime.Now.ToLongTimeString() + " " + ex.Message);
                 listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
             }
         }
@@ -48,23 +50,23 @@ namespace SafeCity
                 fs = new FileStream(info.FileName, FileMode.Open, FileAccess.Read);
                 sr = new StreamReader(fs);
 
-                listBoxLog.Items.Add("Началось считывание данных с файла " + info.FileName + " " + DateTime.Now.ToLongTimeString());
+                listBoxLog.Items.Add(DateTime.Now.ToLongTimeString() + " Началось считывание данных с файла " + info.FileName);
                 listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
 
                 var sensor1Signal = pictureBoxSensor1Signal.CreateGraphics();
                 var sensor2Signal = pictureBoxSensor2Signal.CreateGraphics();
 
-                int gx1 = 0;
-                int gy1 = 0;
-                int gxx1 = 2;
+                int greenXSensor1 = 0;
+                int greenYSensor1 = 0;
+                int greenShiftSensor1 = 2;
 
-                int bx1 = 0;
-                int by1 = 0;
-                int bxx1 = 2;
+                int blueXSensor1 = 0;
+                int blueYSensor1 = 0;
+                int blueShiftSensor1 = 2;
 
-                int rx1 = 0;
-                int ry1 = 0;
-                int rx11 = 2;
+                int redXSensor1 = 0;
+                int redYSensor1 = 0;
+                int redx11 = 2;
 
                 int gx2 = 0;
                 int gy2 = 0;
@@ -82,59 +84,71 @@ namespace SafeCity
                 int i = 0;
                 string[] arrayCoordinates;
                 arrayCoordinates = sr.ReadLine().Split(' ');
+                sensor1Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 60), new Point(800, 60));
+                sensor1Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 120), new Point(800, 120));
+                sensor1Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 180), new Point(800, 180));
+                sensor2Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 60), new Point(800, 60));
+                sensor2Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 120), new Point(800, 120));
+                sensor2Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 180), new Point(800, 180));
 
-                while (i < 3600)
+                while (i < 3800)
                 {
-                    sensorId = Convert.ToInt32(arrayCoordinates[1]);
-                    sensor1Signal.DrawLine(new Pen(Color.Green, 1), gx1, gy1, gxx1, Convert.ToInt32(arrayCoordinates[2]) / 500);
-                    gx1 = gxx1;
-                    gy1 = Convert.ToInt32(arrayCoordinates[2]) / 500;
-                    gxx1 = gxx1 + 2;
+                    sensorId = Convert.ToInt32(arrayCoordinates[0]);
+                    sensor1Signal.DrawLine(new Pen(Color.Green, 1), greenXSensor1, greenYSensor1, greenShiftSensor1, Convert.ToInt32(arrayCoordinates[1]) / 250);
+                    greenXSensor1 = greenShiftSensor1;
+                    greenYSensor1 = Convert.ToInt32(arrayCoordinates[1]) / 250;
+                    greenShiftSensor1 = greenShiftSensor1 + 2;
 
-                    sensor1Signal.DrawLine(new Pen(Color.Blue, 1), bx1, by1, bxx1, Convert.ToInt32(arrayCoordinates[3]) / 500);
-                    bx1 = bxx1;
-                    by1 = Convert.ToInt32(arrayCoordinates[3]) / 500;
-                    bxx1 = bxx1 + 2;
+                    sensor1Signal.DrawLine(new Pen(Color.Blue, 1), blueXSensor1, blueYSensor1, blueShiftSensor1, Convert.ToInt32(arrayCoordinates[2]) / 250);
+                    blueXSensor1 = blueShiftSensor1;
+                    blueYSensor1 = Convert.ToInt32(arrayCoordinates[2]) / 250;
+                    blueShiftSensor1 = blueShiftSensor1 + 2;
 
-                    sensor1Signal.DrawLine(new Pen(Color.Red, 1), rx1, ry1, rx11, Convert.ToInt32(arrayCoordinates[4]) / 500);
-                    rx1 = rx11;
-                    ry1 = Convert.ToInt32(arrayCoordinates[4]) / 500;
-                    rx11 = rx11 + 2;
+                    sensor1Signal.DrawLine(new Pen(Color.Red, 1), redXSensor1, redYSensor1, redx11, Convert.ToInt32(arrayCoordinates[3]) / 250);
+                    redXSensor1 = redx11;
+                    redYSensor1 = Convert.ToInt32(arrayCoordinates[3]) / 250;
+                    redx11 = redx11 + 2;
 
                     arrayCoordinates = sr.ReadLine().Split(' ');
 
-                    if(sensorId != Convert.ToInt32(arrayCoordinates[1]))
+                    if(sensorId != Convert.ToInt32(arrayCoordinates[0]))
                     {
-                        int xx22 = Convert.ToInt32(arrayCoordinates[2]) / 500;
-                        sensor2Signal.DrawLine(new Pen(Color.Green, 1), gx2, gy2, gxx2, Convert.ToInt32(arrayCoordinates[2]) / 500);
+                        int xx22 = Convert.ToInt32(arrayCoordinates[1]) / 500;
+                        sensor2Signal.DrawLine(new Pen(Color.Green, 1), gx2, gy2, gxx2, Convert.ToInt32(arrayCoordinates[1]) / 250);
                         gx2 = gxx2;
-                        gy2 = Convert.ToInt32(arrayCoordinates[2]) / 500;
+                        gy2 = Convert.ToInt32(arrayCoordinates[1]) / 250;
                         gxx2 = gxx2 + 2;
 
-                        sensor2Signal.DrawLine(new Pen(Color.Blue, 1), bx2, by2, bxx2, Convert.ToInt32(arrayCoordinates[3]) / 500);
+                        sensor2Signal.DrawLine(new Pen(Color.Blue, 1), bx2, by2, bxx2, Convert.ToInt32(arrayCoordinates[2]) / 250);
                         bx2 = bxx2;
-                        by2 = Convert.ToInt32(arrayCoordinates[3]) / 500;
+                        by2 = Convert.ToInt32(arrayCoordinates[2]) / 250;
                         bxx2 = bxx2 + 2;
 
-                        sensor2Signal.DrawLine(new Pen(Color.Red, 1), rx2, ry2, rxx2, Convert.ToInt32(arrayCoordinates[4]) / 500);
+                        sensor2Signal.DrawLine(new Pen(Color.Red, 1), rx2, ry2, rxx2, Convert.ToInt32(arrayCoordinates[3]) / 250);
                         rx2 = rxx2;
-                        ry2 = Convert.ToInt32(arrayCoordinates[4]) / 500;
+                        ry2 = Convert.ToInt32(arrayCoordinates[3]) / 250;
                         rxx2 = rxx2 + 2;
 
                         arrayCoordinates = sr.ReadLine().Split(' ');
                     }
-                    if (i % 260 == 0)
+                    if (i % 250 == 0)
                     {
                         sensor1Signal.Clear(Color.White);
                         sensor2Signal.Clear(Color.White);
-                        gx1 = 0;
-                        gxx1 = 2;
+                        sensor1Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 60), new Point(800, 60));
+                        sensor1Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 120), new Point(800, 120));
+                        sensor1Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 180), new Point(800, 180));
+                        sensor2Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 60), new Point(800, 60));
+                        sensor2Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 120), new Point(800, 120));
+                        sensor2Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 180), new Point(800, 180));
+                        greenXSensor1 = 0;
+                        greenShiftSensor1 = 2;
 
-                        bx1 = 0;
-                        bxx1 = 2;
+                        blueXSensor1 = 0;
+                        blueShiftSensor1 = 2;
 
-                        rx1 = 0;
-                        rx11 = 2;
+                        redXSensor1 = 0;
+                        redx11 = 2;
 
                         gx2 = 0;
                         gxx2 = 2;
@@ -146,12 +160,12 @@ namespace SafeCity
                         rxx2 = 2;
                     }
                     i++;
-                    Thread.Sleep(10);
+                    Thread.Sleep(5);
                 }
             }
             catch (Exception ex)
             {
-                listBoxLog.Items.Add(ex.Message + " " + DateTime.Now.ToLongTimeString());
+                listBoxLog.Items.Add(DateTime.Now.ToLongTimeString() + " " + ex.Message);
                 listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
             }
             finally
@@ -159,119 +173,286 @@ namespace SafeCity
                 if (sr != null) sr.Close();
                 if (fs != null) fs.Close();
 
-                listBoxLog.Items.Add("Cчитывание данных с файла " + info.FileName + " завершилось " + DateTime.Now.ToLongTimeString());
+                listBoxLog.Items.Add(DateTime.Now.ToLongTimeString() + "Cчитывание данных с файла " + info.FileName + " завершилось");
                 listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
             }
         }
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
-            try
-            {
-                DataMEMS.portId = "COM3";
-                // поле для COM порта
-                DataMEMS.MEMSport = new SerialPort( DataMEMS.portId , 115200, Parity.None, 8, StopBits.Two);
-                listBoxLog.Items.Add("Подключение к " + DataMEMS.portId + " прошло успешно " + DateTime.Now.ToLongTimeString());
-                listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
-            }
-            catch (Exception ex)
-            {
-                listBoxLog.Items.Add( ex.Message + DateTime.Now.ToLongTimeString());
-                listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
-            }
+            Connect();
         }
-
+        
+        //serialPort = COMPort.Connect(serialPort);
+ 
         private void buttonRun_Click(object sender, EventArgs e)
         {
+            List<Complex> listComplexX = new List<Complex>();
+            List<Complex> listComplexY = new List<Complex>();
+            List<Complex> listComplexZ = new List<Complex>();
+
             var sensor1Signal = pictureBoxSensor1Signal.CreateGraphics();
-                var sensor2Signal = pictureBoxSensor2Signal.CreateGraphics();
+            var sensor2Signal = pictureBoxSensor2Signal.CreateGraphics();
 
-                int gx1 = 0;
-                int gy1 = 0;
-                int gxx1 = 2;
+            int greenXSensor1 = 0;
+            int greenYSensor1 = 0;
+            int greenShiftSensor1 = 2;
 
-                int bx1 = 0;
-                int by1 = 0;
-                int bxx1 = 2;
+            int blueXSensor1 = 0;
+            int blueYSensor1 = 0;
+            int blueShiftSensor1 = 2;
 
-                int rx1 = 0;
-                int ry1 = 0;
-                int rx11 = 2;
+            int redXSensor1 = 0;
+            int redYSensor1 = 0;
+            int redShiftSensor1 = 2;
 
-                int gx2 = 0;
-                int gy2 = 0;
-                int gxx2 = 2;
+            int greenXSensor2 = 0;
+            int greenYSensor2 = 0;
+            int greenShiftSensor2 = 2;
 
-                int bx2 = 0;
-                int by2 = 0;
-                int bxx2 = 2;
+            int blueXSensor2 = 0;
+            int blueYSensor2 = 0;
+            int blueShiftSensor2 = 2;
 
-                int rx2 = 0;
-                int ry2 = 0;
-                int rxx2 = 2;
+            int redXSensor2 = 0;
+            int redYSensor2 = 0;
+            int redShiftSensor2 = 2;
 
-                int sensorId1 = 0;
-            int sensorId2;
-
-            int ii = 0;
+            int sensorId1 = 0;
             int i = 0;
-            int[] inter;
-            while (i < 100)
+            int[] arrayCoordinates;
+            sensor1Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 60), new Point(800, 60));
+            sensor1Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 120), new Point(800, 120));
+            sensor1Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 180), new Point(800, 180));
+            sensor2Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 60), new Point(800, 60));
+            sensor2Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 120), new Point(800, 120));
+            sensor2Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 180), new Point(800, 180));
+            while (i < 1000)
             {
-                inter = DataMEMS.ReadDataFromMEMS();
-                //sensorId1 = inter[0];
+                arrayCoordinates = Accelerometr.GetData(serialPort);
                 if (i == 0)
+                    sensorId1 = arrayCoordinates[0];
+                if (arrayCoordinates[0] == sensorId1)
                 {
-                    sensorId1 = inter[0];
-                }
+                    sensor1Signal.DrawLine(new Pen(Color.Green, 1), greenXSensor1, greenYSensor1, greenShiftSensor1, arrayCoordinates[1] / 250);
+                    greenXSensor1 = greenShiftSensor1;
+                    greenYSensor1 = arrayCoordinates[1] / 250;
+                    greenShiftSensor1 = greenShiftSensor1 + 2;
+                    listComplexX.Add(new Complex(arrayCoordinates[1], 0));
 
-                if (inter[0] == sensorId1)
-                {
-                sensor1Signal.DrawLine(new Pen(Color.Green, 1), gx1, gy1, gxx1, inter[1] / 500);
-                gx1 = gxx1;
-                gy1 = inter[1] / 500;
-                gxx1 = gxx1 + 2;
+                    sensor1Signal.DrawLine(new Pen(Color.Blue, 1), blueXSensor1, blueYSensor1, blueShiftSensor1, arrayCoordinates[2] / 250);
+                    blueXSensor1 = blueShiftSensor1;
+                    blueYSensor1 = arrayCoordinates[2] / 250;
+                    blueShiftSensor1 = blueShiftSensor1 + 2;
+                    listComplexY.Add(new Complex(arrayCoordinates[2], 0));
 
-                sensor1Signal.DrawLine(new Pen(Color.Blue, 1), bx1, by1, bxx1, inter[2] / 500);
-                bx1 = bxx1;
-                by1 = inter[2] / 500;
-                bxx1 = bxx1 + 2;
-
-                sensor1Signal.DrawLine(new Pen(Color.Red, 1), rx1, ry1, rx11, inter[3] / 500);
-                rx1 = rx11;
-                ry1 = inter[3] / 500;
-                rx11 = rx11 + 2;
+                    sensor1Signal.DrawLine(new Pen(Color.Red, 1), redXSensor1, redYSensor1, redShiftSensor1, arrayCoordinates[3] / 250);
+                    redXSensor1 = redShiftSensor1;
+                    redYSensor1 = arrayCoordinates[3] / 250;
+                    redShiftSensor1 = redShiftSensor1 + 2;
+                    listComplexZ.Add(new Complex(arrayCoordinates[3], 0));
                 }
                 else
                 {
-                    int xx22 = inter[1] / 500;
-                    sensor2Signal.DrawLine(new Pen(Color.Green, 1), gx2, gy2, gxx2, inter[1] / 500);
-                    gx2 = gxx2;
-                    gy2 = inter[1] / 500;
-                    gxx2 = gxx2 + 2;
+                    sensor2Signal.DrawLine(new Pen(Color.Green, 1), greenXSensor2, greenYSensor2, greenShiftSensor2, arrayCoordinates[1] / 250);
+                    greenXSensor2 = greenShiftSensor2;
+                    greenYSensor2 = arrayCoordinates[1] / 250;
+                    greenShiftSensor2 = greenShiftSensor2 + 2;
 
-                    sensor2Signal.DrawLine(new Pen(Color.Blue, 1), bx2, by2, bxx2, inter[2] / 500);
-                    bx2 = bxx2;
-                    by2 = inter[2] / 500;
-                    bxx2 = bxx2 + 2;
+                    sensor2Signal.DrawLine(new Pen(Color.Blue, 1), blueXSensor2, blueYSensor2, blueShiftSensor2, arrayCoordinates[2] / 250);
+                    blueXSensor2 = blueShiftSensor2;
+                    blueYSensor2 = arrayCoordinates[2] / 250;
+                    blueShiftSensor2 = blueShiftSensor2 + 2;
 
-                    sensor2Signal.DrawLine(new Pen(Color.Red, 1), rx2, ry2, rxx2, inter[3] / 500);
-                    rx2 = rxx2;
-                    ry2 = inter[3] / 500;
-                    rxx2 = rxx2 + 2;
+                    sensor2Signal.DrawLine(new Pen(Color.Red, 1), redXSensor2, redYSensor2, redShiftSensor2, arrayCoordinates[3] / 250);
+                    redXSensor2 = redShiftSensor2;
+                    redYSensor2 = arrayCoordinates[3] / 250;
+                    redShiftSensor2 = redShiftSensor2 + 2;
                 }
-                listBoxLog.Items.Add(inter[0] + " " + inter[1] + " " + inter[2] + " " + inter[3] + " " + DateTime.Now.ToLongTimeString());
-                listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
+                //listBoxLog.Items.Add(DateTime.Now.ToLongTimeString() + " " + arrayCoordinates[0] + " " + arrayCoordinates[1] + " " + arrayCoordinates[2] + " " + arrayCoordinates[3]);
+                //listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
+                if (i % 250 == 0)
+                {
+                    sensor1Signal.Clear(Color.White);
+                    sensor2Signal.Clear(Color.White);
+                    sensor1Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 60), new Point(800, 60));
+                    sensor1Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 120), new Point(800, 120));
+                    sensor1Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 180), new Point(800, 180));
+                    sensor2Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 60), new Point(800, 60));
+                    sensor2Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 120), new Point(800, 120));
+                    sensor2Signal.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 180), new Point(800, 180));
 
+                    greenXSensor1 = 0;
+                    greenShiftSensor1 = 2;
 
-                //string[] arrayCoordinates;
-                //arrayCoordinates = inter;
+                    blueXSensor1 = 0;
+                    blueShiftSensor1 = 2;
 
+                    redXSensor1 = 0;
+                    redShiftSensor1 = 2;
 
+                    greenXSensor2 = 0;
+                    greenShiftSensor2 = 2;
 
+                    blueXSensor2 = 0;
+                    blueShiftSensor2 = 2;
+
+                    redXSensor2 = 0;
+                    redShiftSensor2 = 2;
+                }
                 i++;
             }
-            
+
+            Complex[] samplesX = listComplexX.ToArray();
+            Complex[] samplesY = listComplexY.ToArray();
+            Complex[] samplesZ = listComplexZ.ToArray();
+
+            //chart1.ChartAreas[0].AxisX.Minimum = -1000;
+            //chart1.ChartAreas[0].AxisX.Maximum = 10;
+            //chart1.ChartAreas[0].AxisX.Interval = 1;
+            //chart1.ChartAreas[0].AxisY.Minimum = -1000;
+            //chart1.ChartAreas[0].AxisY.Maximum = 100;
+
+            Fourier.Forward(samplesX, FourierOptions.Matlab);
+            for (int j = 0; j < samplesX.Length/10; j++)
+            {
+                chart1.Series["X"].Points.AddXY
+                        (j, samplesX[j * 10].Magnitude);
+
+            }
+
+            Fourier.Forward(samplesY, FourierOptions.Matlab);
+            for (int j = 0; j < samplesY.Length / 10; j++)
+            {
+                chart2.Series["Y"].Points.AddXY
+                        (j, samplesY[j * 10].Magnitude);
+
+            }
+            Fourier.Forward(samplesZ, FourierOptions.Matlab);
+            for (int j = 0; j < samplesZ.Length / 10; j++)
+            {
+
+                chart3.Series["Z"].Points.AddXY
+                        (j, samplesZ[j * 10].Magnitude);
+
+            }
         }
+
+        private void connectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Connect();
+        }
+
+        private void aboutProgramToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormAboutProgram formAboutProgram = new FormAboutProgram();
+            formAboutProgram.Show();
+        }
+
+        private void pictureBoxInfoSensor1_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.FillRectangle(Brushes.Green, 200, 2, 10, 10);
+            e.Graphics.DrawString("X", new Font("Times New Roman", 10), Brushes.Black, 220, 2);
+            e.Graphics.FillRectangle(Brushes.Blue, 250, 2, 10, 10);
+            e.Graphics.DrawString("Y", new Font("Times New Roman", 10), Brushes.Black, 270, 2);
+            e.Graphics.FillRectangle(Brushes.Red, 300, 2, 10, 10);
+            e.Graphics.DrawString("Z", new Font("Times New Roman", 10), Brushes.Black, 320, 2);
+        }
+
+        private void pictureBoxInfoSensor2_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.FillRectangle(Brushes.Green, 200, 2, 10, 10);
+            e.Graphics.DrawString("X", new Font("Times New Roman", 10), Brushes.Black, 220, 2);
+            e.Graphics.FillRectangle(Brushes.Blue, 250, 2, 10, 10);
+            e.Graphics.DrawString("Y", new Font("Times New Roman", 10), Brushes.Black, 270, 2);
+            e.Graphics.FillRectangle(Brushes.Red, 300, 2, 10, 10);
+            e.Graphics.DrawString("Z", new Font("Times New Roman", 10), Brushes.Black, 320, 2);
+        }
+
+        private void pictureBoxSensor1Signal_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 60), new Point(800, 60));
+            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 120), new Point(800, 120));
+            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 180), new Point(800, 180));
+        }
+
+        private void pictureBoxSensor2Signal_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 60), new Point(800, 60));
+            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 120), new Point(800, 120));
+            e.Graphics.DrawLine(new Pen(Color.FromArgb(233, 233, 233)), new Point(0, 180), new Point(800, 180));
+        }
+
+        private void buttonExportToR_Click(object sender, EventArgs e)
+        {
+            string path = @"D:\result.html";
+            System.Diagnostics.Process.Start(path);
+
+        }
+        private void Connect()
+        {
+            if (connect == true)
+            {
+                serialPort = COMPort.Connect(serialPort);
+
+                if (serialPort == null)
+                {
+                    Logging(" Поделючиться к COM3 не удалось");
+                    return;
+                }
+                buttonConnect.Text = "        Disconnect";
+                buttonConnect.ForeColor = Color.White;
+                buttonConnect.BackColor = Color.Red;
+                buttonConnect.Image = Properties.Resources.button_off;
+                connectToolStripMenuItem.Text = "Disconnect";
+                connectToolStripMenuItem.Image = Properties.Resources.button_red;
+                connect = false;
+                Logging(" Подключение к COM3 прошло успешно");
+
+
+                //try
+                //{
+
+                //    //serialPort = new SerialPort("COM3", 115200, Parity.None, 8, StopBits.Two);
+                //    //serialPort.Open();
+                //    //DataMEMS.MEMSport = new SerialPort("COM3", 9600, Parity.None, 8, StopBits.Two);
+                //    //DataMEMS.OpenPort(true);
+                //    listBoxLog.Items.Add(DateTime.Now.ToLongTimeString() + " Подключение к COM3 прошло успешно");
+                //    listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
+                //}
+                //catch (Exception ex)
+                //{
+                //    //listBoxLog.Items.Add(DateTime.Now.ToLongTimeString() + " " + ex.Message);
+                //    //listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
+                //}
+            }
+            else
+            {
+                //DataMEMS.OpenPort(false);
+                COMPort.Disconnect(serialPort);
+                buttonConnect.Text = "     Connect";
+                buttonConnect.ForeColor = Color.White;
+                buttonConnect.BackColor = Color.FromArgb(44, 48, 51);
+                buttonConnect.Image = Properties.Resources.button_off;
+                connectToolStripMenuItem.Text = "Connect";
+                connectToolStripMenuItem.Image = Properties.Resources.button_on;
+                connect = true;
+
+                var sensor1Signal = pictureBoxSensor1Signal.CreateGraphics();
+                var sensor2Signal = pictureBoxSensor2Signal.CreateGraphics();
+                sensor1Signal.Clear(Color.White);
+                sensor2Signal.Clear(Color.White);
+                Logging(" Отключение от COM3 прошло успешно");
+                //listBoxLog.Items.Add(DateTime.Now.ToLongTimeString() + " Отключение от COM3 прошло успешно");
+                //listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
+            }
+        }
+
+        private void Logging(string message)
+        {
+            listBoxLog.Items.Add(DateTime.Now.ToLongTimeString() + message);
+            listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
+        }
+
     }
 }
