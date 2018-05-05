@@ -97,12 +97,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MEMSData\MEMSData.csproj">
-      <Project>{57136030-9e8c-4a47-9942-451f0c25dc82}</Project>
-      <Name>MEMSData</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\button-on.png" />
   </ItemGroup>
   <ItemGroup>

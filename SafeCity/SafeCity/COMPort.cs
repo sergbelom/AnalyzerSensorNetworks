@@ -24,7 +24,6 @@ namespace SafeCity
                 return null;
             }
         }
-
         public static void Disconnect(SerialPort serialPort)
         {
             serialPort.Close();
